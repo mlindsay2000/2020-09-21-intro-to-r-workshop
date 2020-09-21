@@ -1,7 +1,7 @@
 #
 # A very quick demonstation of the sorts of things your can do with R
 #
-
+# updated on Monday during 1st session of workshop
 
 # Load the GGPLOT2 library
 library(ggplot2)
