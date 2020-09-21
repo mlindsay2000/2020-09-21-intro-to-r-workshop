@@ -17,6 +17,7 @@
 # other operators
 #
 # - * / ** ^ ( )
+3**2
 
 # 
 # Excercises
@@ -25,16 +26,16 @@
 # What does: 11 + 1 / 6  evaluate to ?
 
 # Solution:
-
+11+1/6
 
 # Calculate 10 plus 2 all divided by 3 and then squared
 
 # Solution:
 
+((10+2)/3)**2
 
 
-
-# Storing values
+# Storing values <- THE SHORTCUT FOR <-  IS ALT+'-' 
 a <- 3              # assign the number 3 to OBJECT (variable) called "a"
 b <- 5              # assign 5 to b
 
@@ -48,7 +49,8 @@ a + b               # we can add them together just like numbers
 # --------
 #
 # What happens if we change a and then re-add a and b? [Hint: Try it now]
-#
+a <- 8
+a + b
 # Does it work if you just change a in the script and then add a and b? [Hint: Try it]
 #
 # Did you still get the same answer after you changed a? 
@@ -56,7 +58,11 @@ a + b               # we can add them together just like numbers
 #
 # We can also assign the result of a + b to a new variable, c. 
 # How would you do this?
-#
+c = a+b
+
+c <- a-b
+
+c <- a + b
 # Solution:
 
 
@@ -65,6 +71,8 @@ a + b               # we can add them together just like numbers
 #
 # == != < > >= <= !
 1 < 124
+
+# ! means 'not'     != means 'not equal to'
 
 #
 # Sensible object names are sensible ...
@@ -83,31 +91,31 @@ ekljre2jklwef023ijlefj93jkl23rj90f32k <- 1
 # 
 #
 # Assign the name of this workshop to a object with a good name.
-#
+R_workshop <- "Introduction to R"
 # Solution: [Hint:       <- "Introduction to R"]
 
 # Assign the name of video conferencing tool we are using to an object
-#
+online_meeting <- "Zoom"
 # Solution: [Hint:      <- "Zoom"]
 
 
 # Which of these are valid object names: [Hint: Try them out]
 #
-#  min_height
-#  max.height
-#  _age
-#  .mass
-#  MaxLength
-#  min-length
-#  2widths
-#  celsius2kelvin
+ min_height <- 12
+ max.height <- 24
+ _age <- 12
+ .mass <- 12
+ MaxLength
+ min-length <- 12
+ 2widths
+ celsius2kelvin
 
 #
 # Topic: Displaying results
 #
 
 weight_lb <- 55    # doesn't print anything
-(weight_lb <- 55)  # but putting parenthesis () around and expression makes it display
+(weight_lb <- 55)  # but putting parenthesis () around an expression makes it display
 weight_lb          # and so does typing the name of the object
 
 # There are 2 and a bit pounds in a kilogram 
@@ -125,11 +133,11 @@ weight_kg
 # 
 # What are the values after each statement in the following?
 # 
-# mass <- 47.5            # mass is: 
+# mass <- 47.5            # mass is:
 # age  <- 122             # age is:
 # mass <- mass * 2.0      # mass is:
 # age  <- age - 20        # age is:
-# mass_index <- mass/age  # mass_index is: 
+# mass_index <- mass/age  # mass_index is:
 #
 # How do we do we know if our answers are correct ? 
 # [Hint: <highlight> [ALT][ENTER]
@@ -150,20 +158,21 @@ weight_kg
 #
 # Add explanatory comments to the following lines of code
 
-ft <- 3
-in <- ft * 12
-cms <- in * 2.54
-m = cms / 100
+ft <- 3                       # 'ft' is feet in length
+in <- ft * 12                 # 'in' is length in inches
+cms <- in * 2.54              # 'cms' is length in centimetres
+m = cms / 100                 # 'm' is length in metres
 
 #
 # Topic: Functions and Arguments
 #
-sqrt(2)
+sqrt(2)             #    sqrt is the function and 2 is the argument. Round brackets, that house the argument, have to follow the function
+a <- 2
 sqrt(a)
 abs(-23.3)
 round(3.14159)
 pi
-
+round(3.14159)
 # Getting help about particular functions 
 ?round
 args(round)
@@ -178,7 +187,7 @@ round(digits = 2, x = 3.14159)
 #
 # Answer:
 
-
+log10(200)
 
 #
 # Topic: Vectors and Data Types
