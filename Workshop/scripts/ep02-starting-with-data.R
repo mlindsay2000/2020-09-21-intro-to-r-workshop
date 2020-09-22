@@ -20,7 +20,9 @@ surveys <- read.csv("data_raw/portal_data_joined.csv")
 
 # and take a look at it
 
-
+surveys
+head(surveys)           # gives first six rows
+View(surveys)           # this is a R Studio command (as opposed to R)
 
 # BTW, we assumed our data was comma separated, however this might not
 # always be the case. So we may been to tell read.csv more about our file.
@@ -29,11 +31,20 @@ surveys <- read.csv("data_raw/portal_data_joined.csv")
 
 # So what kind of an R object is "surveys" ?
 
-
+class(surveys)            #  answer is "data.frame"
 
 # ok - so what are dataframes ?
 
-
+str(surveys)       # this gives us the structure of the dataframe
+                   # a factor is a way of recording elements - will cover this later today
+dim(surveys)       # tells us the dimension of the dataframe
+nrow(surveys)       # tells us the number of rows in the dataframe
+ncol(surveys)       # tells us the number of rows in the dataframe
+tail(surveys)       # gives last six rows (opposite to head())
+tail(surveys,2)       # gives last two rows 
+names(surveys)       # gives us the names of the columns
+rownames(surveys)       # gives us the names of the rows
+summary(surveys)       # will produce some statistics that may or may not be useful
 
 # --------
 # Exercise
@@ -41,22 +52,22 @@ surveys <- read.csv("data_raw/portal_data_joined.csv")
 #
 # What is the class of the object surveys?
 #
-# Answer:
+# Answer: data.frame
 
 
 # How many rows and how many columns are in this survey ?
 #
-# Answer:
+# Answer:  34786 x 13
 
 # What's the average weight of survey animals
 #
 #
-# Answer:
+# Answer: 42.67   can be found in      summary(surveys)  
 
 # Are there more Birds than Rodents ?
 #
 #
-# Answer:
+# Answer:   no
 
 
 # 
@@ -64,13 +75,13 @@ surveys <- read.csv("data_raw/portal_data_joined.csv")
 #
 
 # first element in the first column of the data frame (as a vector)
-
+surveys[1,1]                 # note SQUARE BRACKETS
 
 # first element in the 6th column (as a vector)
-
+surveys[1,6]  
 
 # first column of the data frame (as a vector)
-
+surveys[,6]  
 
 # first column of the data frame (as a data frame)
 
