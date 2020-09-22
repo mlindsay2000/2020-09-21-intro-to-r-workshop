@@ -173,6 +173,7 @@ year
 as.numeric(year)
 as.character(year)
 as.numeric(as.character(year))
+
 # so does our survey data have any factors
 
 
