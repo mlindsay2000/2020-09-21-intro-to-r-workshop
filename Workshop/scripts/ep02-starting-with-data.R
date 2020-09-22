@@ -176,30 +176,81 @@ as.numeric(as.character(year))
 
 # so does our survey data have any factors
 
+str(surveys)
 
-#
+# it turns out that quite a few of the variables are factors
+# this happened automatically when the data was being transferred into R
+# this can be avoided in some circumstances
+
 # Topic:  Dealing with Dates
-#
+#  ML - can be a nightmare. There are in built solutions, but there are also 'Packages'
+#  that contributors have developed to help address some issues that arise when dealing with dates
+#  these can be installed using the library function
+
+
 
 # R has a whole library for dealing with dates ...
+library(lubridate)
 
-
-
+my_date <- ymd("2015-01-01")        # ymd is a function that comes from lubridate
+class(my_date)
+# I want date in this format date: 7-16-1977 which will involve pasting 3 columns in some way
 # R can concatenated things together using paste()
 
+paste("abc","123","xyz")
+paste("abc","123","xyz", sep ="+")
+paste("abc","123","xyz", sep ="-")
+paste("2015","01","26", sep ="-")
+ymd(paste("2015","01","26", sep ="-"))
+my_date <- ymd(paste("2015","01","26", sep ="-"))
+class(my_date)
 
 # 'sep' indicates the character to use to separate each component
 
 
 # paste() also works for entire columns
-
-
+surveys[,2]
+surveys$month
+head(surveys[,2])
+head(surveys$month)
+paste(surveys$year,surveys$month,surveys$day, sep ="-")
+ymd(paste(surveys$year,surveys$month,surveys$day, sep ="-"))
+# typing in the name of the dataframe and then '$' will then present you with a list of the variable names
+#  which you can choose from
 # let's save the dates in a new column of our dataframe surveys$date 
+surveys$date <- ymd(paste(surveys$year,
+                          surveys$month,
+                          surveys$day, sep ="-"))
+#  surveys$date creates a new variable called 'date'
 
-
+View(surveys)
 # and ask summary() to summarise 
-
+summary(surveys)
 
 # but what about the "Warning: 129 failed to parse"
 
+# some data cannot be converted to date
 
+summary(surveys$date)
+# output showed that there are 129 NAs in the data column
+# so how do we find them?
+
+is.na(surveys$date)           #  but this is a bit tedious
+missing_date <- is.na(surveys$date)           
+missing_date <- surveys[is.na(surveys$date),"date"]
+missing_date
+# but we also want to know what the inputs for the date look 
+#  like so we can try to find out why date is 'NA'
+missing_date <- surveys[is.na(surveys$date),c("date","year","month","day")]
+missing_date
+missing_date <- surveys[is.na(surveys$date),c("year","month","day")]
+missing_date
+summary(missing_date)
+
+# problem is that some dates are shown as 31st day of months that only have 30 days
+
+# then to try to find each of the actual observations I would ask for record_id as well
+
+missing_date <- surveys[is.na(surveys$date),c("record_id",year","month","day")]
+missing_date
+summary(missing_date)
