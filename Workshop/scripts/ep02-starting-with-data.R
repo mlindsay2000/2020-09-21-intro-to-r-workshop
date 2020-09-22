@@ -81,29 +81,31 @@ surveys[1,1]                 # note SQUARE BRACKETS
 surveys[1,6]  
 
 # first column of the data frame (as a vector)
-surveys[,6]  
+surveys[,6]       # if you leave out the number of rows it will give you all of them
 
 # first column of the data frame (as a data frame)
-
+surveys[1]        # notice no comma, which results in you getting a dataframe as opposed to a vector
 
 # first row (as a data frame)
-
+surveys[1,]       # notice that this doesn't output as a vector cause all the 
+#    peices of info are different data types, The output is actually a dataframe
 
 # first three elements in the 7th column (as a vector)
-
+surveys[1:3,7]
 
 # the 3rd row of the data frame (as a data.frame)
+surveys[3,] 
 
-
-# equivalent to head(metadata)
-
-
+# equivalent to head(surveys)
+head(surveys)
+surveys[1:6,]
 # looking at the 1:6 more closely
-
-
+1:6               #  it is a range that includes the numbers you start with and finish with
+surveys[c(1,2,3,4,5,6),]         #    this gives you the same as head()
 # we also use other objects to specify the range
 
-
+rows <- 6
+surveys[1:rows,3]
 
 #
 # Challenge: Using slicing, see if you can produce the same result as:
@@ -113,31 +115,64 @@ surveys[,6]
 # i.e., print just last 6 rows of the surveys dataframe
 #
 # Solution:
+nrow(surveys)
+surveys[34781:34786,]
+surveys[34781:nrow(surveys),]
+surveys[(nrow(surveys)-6):nrow(surveys),]     # but this gives 7 rows cause it includes the first and last
+surveys[(nrow(surveys)-5):nrow(surveys),]     # this gives 6 rows
 
-
+length(surveys)
+length(surveys[1])
+length(surveys[,1])
 
 # We can omit (leave out) columns using '-'
 
-
-
+surveys[-1]                  #  gives us the whole dataframe except the first column
+surveys[c(-1,-2,-3)]                  #  gives us the whole dataframe except the first three column
+head(surveys[c(-1,-2,-3)])            # wrapping it in head() makes the output neater
+head(surveys[-(1:3)])                 # can also use range
 # column "names" can be used in place of the column numbers
-
+head(surveys[2])                 # this uses column number
+head(surveys["month"])           # produces the same with column names
 
 
 #
 # Topic: Factors (for categorical data)
-#
+#   ML - e.g. they are not continuous
+#   Rankings: low, medium, high
+#   gender
 
+gender <- c("male","male","female")           # but this creates a vector of character stings, so use
+gender <- factor(c("male","male","female"))      # which creates a factor
+gender
 
+class(gender)
+levels(gender)
+nlevels(gender)
 # factors have an order
+# ML - such as low, medium, high
 
+temperature <- factor (c("hot","cold","hot","warm"))
+temperature[1]
+temperature[4]
+levels(temperature)
+
+# level order automatically in alphabetical order, BUT WE CAN SPECIFY AN ALTERNATIVE
+temperature <- factor (c("hot","cold","hot","warm"),
+                      level = c("cold","warm","hot"))
+levels(temperature)
 
 # Converting factors
-
+#  can take an object and turn it in to a different object
+as.numeric(temperature)
+as.character(temperature)
 
 # can be tricky if the levels are numbers
-
-
+year <- factor(c(1970,1985,1965,1970))
+year
+as.numeric(year)
+as.character(year)
+as.numeric(as.character(year))
 # so does our survey data have any factors
 
 
