@@ -254,3 +254,11 @@ summary(missing_date)
 missing_date <- surveys[is.na(surveys$date),c("record_id",year","month","day")]
 missing_date
 summary(missing_date)
+
+
+today <- ymd("2020-09-22")
+yesterday <- ymd("2020-09-21")
+today - yesterday
+
+boc <- ymd("0000-12-25")
+today - boc
