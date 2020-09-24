@@ -31,27 +31,58 @@ download.file(url = "https://ndownloader.figshare.com/files/2292169",
 #------------------
 # Lets get started!
 #------------------
+# ML - need to load tidyverse
+install.packages("tidyverse")
+library(tidyverse)
+# dplyr and tidyr
 
+# now load the dataset
+surveys <- read_csv("data_raw/portal_data_joined.csv")
 
-
-
+# check structure
+str(surveys)
 
 
 #-----------------------------------
 # Selecting columns & filtering rows
 #-----------------------------------
 
+select(surveys, plot_id, species_id, weight)
 
+# no select all the columns BUT not record_id and species_id
 
+select(surveys, -record_id, -species_id)
 
+# filter for a particular year
 
+filter(surveys, year == 1995)
+
+#  you can name the filtered data
+
+surveys_1995 <- filter(surveys, year == 1995)
+
+# and some more
+
+surveys2 <- filter(surveys, weight < 5)
+surveys_sml <- select(surveys2, species_id, sex, weight)
+# or in one line
+surveys_sml <- select(filter(surveys, weight < 5), species_id, sex, weight)
 
 
 #-------
 # Pipes
 #-------
 
+# The pipe --> %>%
+# Shortcut --> Ctrl + shift = m
 
+surveys %>%
+  filter(weight < 5) %>%
+  select(species_id, sex, weight)
+
+surveys_sml <- surveys %>%
+  filter(weight < 5) %>%
+  select(species_id, sex, weight)
 
 
 
@@ -63,17 +94,54 @@ download.file(url = "https://ndownloader.figshare.com/files/2292169",
 # Using pipes, subset the ```surveys``` data to include animals collected before 1995 and 
 # retain only the columns ```year```, ```sex```, and ```weight```.
 
+surveys %>%
+  select(year, sex, weight) %>% 
+  filter(year < 1995)
 
+#  you can name this if you want
 
-
+surveys_1995 <- surveys %>%
+  select(year, sex, weight) %>%    #  the order of your variables will be replicated in the dataframe
+  filter(year < 1995)
 
 #--------
 # Mutate
 #--------
 
+# handy if you want to convert one column into another and keep the original column
 
+surveys %>% 
+  mutate(weight_kg = weight / 1000)
 
+# now we can create more than one new var in same command
 
+surveys %>% 
+  mutate(weight_kg = weight / 1000,
+         weight_lb = weight_kg / 2.2)
+# to save this as a new dataframe
+
+surveys_weights <- surveys %>% 
+  mutate(weight_kg = weight / 1000,
+         weight_lb = weight_kg / 2.2)
+
+# to check this data
+
+surveys %>% 
+  mutate(weight_kg = weight / 1000,
+         weight_lb = weight_kg / 2.2) %>% 
+  head()
+
+surveys %>% 
+  mutate(weight_kg = weight / 1000,
+         weight_lb = weight_kg / 2.2) %>% 
+  tail()
+
+# now filter out the NAs
+
+surveys %>% 
+  filter(!is.na(weight)) %>% 
+  mutate(weight_kg = weight / 10000) %>% 
+  head(20)
 
 
 #-----------
@@ -81,12 +149,17 @@ download.file(url = "https://ndownloader.figshare.com/files/2292169",
 #-----------
 
 # Create a new data frame from the ```surveys``` data that meets the following criteria: 
-# contains only the ```species_id``` column and a new column called ```hindfoot_cm``` containing 
+# 1. contains only the ```species_id``` column and a new column called ```hindfoot_cm``` containing 
 # the ```hindfoot_length``` values converted to centimeters. In this hindfoot_cm column, 
 # there are no ```NA```s and all values are less than 3.
 
 # Hint: think about how the commands should be ordered to produce this data frame!
 
+
+surveys_foot_len <- surveys %>% 
+  mutate(hindfoot_cm = hindfoot_length / 10) %>% 
+  filter(!is.na(hindfoot_cm), hindfoot_cm < 3) %>% 
+  select(species_id, hindfoot_cm)
 
 
 
