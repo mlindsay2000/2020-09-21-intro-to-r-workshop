@@ -161,16 +161,109 @@ surveys_foot_len <- surveys %>%
   filter(!is.na(hindfoot_cm), hindfoot_cm < 3) %>% 
   select(species_id, hindfoot_cm)
 
-
+# REMINDER - ALL THE ABOVE IS DONE WITH TIDYVERSE PACKAGE
 
 
 #---------------------
 # Split-apply-combine
 #---------------------
 
+# say we want to group some elements of our data
 
+surveys %>% 
+  group_by(sex) %>% 
+  summarise(mean_weight = mean(weight))
 
+# BUT IF WE WANT TO REMOVE THE NAs before averaging
 
+surveys %>% 
+  group_by(sex) %>% 
+  summarise(mean_weight = mean(weight, na.rm = TRUE))
+
+summary(surveys)
+
+# to find help for summarise function 
+?summarise
+
+# when you're running multiple packages that have the same function you can identify which of the 
+# packages you want it to use by putting the package name then '::' before the name of the function
+# e.g. dplyr::group_by(sex)
+
+# now let's check the data again
+str(surveys)
+
+# what if we want the variable 'sex' as a data type factor instead of character
+
+surveys$sex <- as.factor(surveys$sex)
+str(surveys)
+
+surveys %>% 
+  filter(!is.na(weight)) %>% 
+  group_by(sex, species_id) %>% 
+  summarise(mean_weight = mean(weight)) %>% 
+  tail()
+
+# but what if we also want to get rid of the NAs in 'sex'
+
+surveys %>% 
+  filter(!is.na(weight), !is.na(sex)) %>% 
+  group_by(sex, species_id) %>% 
+  summarise(mean_weight = mean(weight)) %>% 
+  tail()
+
+# to see the top 20 obs we could end the above code with 'print(20) instead of 'head()' or 'tail()'
+
+# Evan thinks there may be a way to get rid of the NAs in ALL of the variables - he's going to get back to us on that
+# look at the complete.cases()  function   for help type ?complete.cases()
+
+# if you want to order the data by a particular variable. The code below will sort by min_weight, a variable that is also 
+# created in the code
+surveys %>% 
+  filter(!is.na(weight), !is.na(sex)) %>% 
+  group_by(sex, species_id) %>% 
+  summarise(mean_weight = mean(weight),
+            min_weight = min(weight)) %>% 
+  arrange(min_weight)
+
+# to put it onto decending order
+# ANSWER:  wrap the var in a desc(), as follows:
+
+surveys %>% 
+  filter(!is.na(weight), !is.na(sex)) %>% 
+  group_by(sex, species_id) %>% 
+  summarise(mean_weight = mean(weight),
+            min_weight = min(weight)) %>% 
+  arrange(desc(min_weight))
+
+# ANSWER: or put a neg sign in front of the var, as follows:
+surveys %>% 
+  filter(!is.na(weight), !is.na(sex)) %>% 
+  group_by(sex, species_id) %>% 
+  summarise(mean_weight = mean(weight),
+            min_weight = min(weight)) %>% 
+  arrange(-min_weight)
+
+# now the count function
+
+surveys %>% 
+  count(sex)
+
+surveys %>% 
+  group_by(sex) %>% 
+  summarise(count = n())
+
+# what about grouping by multiple vars? NOTE: order does matter
+surveys %>% 
+  group_by(sex,species, taxa) %>% 
+  summarise(count = n())
+
+# what about UNgrouping
+
+surveys_new <- surveys %>% 
+  group_by(sex,species, taxa) %>% 
+  summarise(count = n())
+
+str(surveys_new)
 
 
 #-----------
@@ -186,6 +279,23 @@ surveys_foot_len <- surveys %>%
 # 3. What was the heaviest animal measured in each year? 
 #    Return the columns ```year```, ```genus```, ```species_id```, and ```weight```.
 
+#1
+surveys %>% 
+  count(plot_type)
+#2
+surveys %>% 
+  filter(!is.na(hindfoot_length)) %>% 
+  group_by(species_id) %>% 
+  summarise(mean_hindfoot_length = mean(hindfoot_length),
+            mean_hindfoot_length = min(hindfoot_length),
+            max_hindfoot_length = max(hindfoot_length), 
+            count = n())
+#3
+heaviest_year <- surveys %>% 
+  group_by(year) %>% 
+  select(year, genus, species_id, weight) %>% 
+  mutate(max_weight = max(weight, na.rm = TRUE)) %>% 
+  ungroup()
 
 
 
