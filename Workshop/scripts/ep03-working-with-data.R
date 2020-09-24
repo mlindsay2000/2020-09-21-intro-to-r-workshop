@@ -297,6 +297,14 @@ heaviest_year <- surveys %>%
   mutate(max_weight = max(weight, na.rm = TRUE)) %>% 
   ungroup()
 
+#3 or this one
+heaviest_year3 <- surveys %>% 
+  filter(!is.na(weight)) %>% 
+  group_by(year) %>% 
+  filter(weight == max(weight)) %>% 
+  select(year, genus, species_id, weight) %>% 
+  arrange(year) %>% 
+  distinct()
 
 
 
@@ -304,8 +312,24 @@ heaviest_year <- surveys %>%
 # Reshaping
 #-----------
 
+surveys_gw <- surveys %>% 
+  filter(!is.na(weight)) %>% 
+  group_by(plot_id,genus) %>% 
+  summarise(mean_weight = mean(weight))
 
 
+str(surveys_gw)
+
+surveys_wider <- surveys_gw %>% 
+  spread(key = genus, value = mean_weight)
+
+str(surveys_wider)
+
+surveys_gather <- surveys_wider %>% 
+  gather(key = genus, value = mean_weight, -plot_id)
+
+surveys_gather2 <- surveys_wider %>% 
+  gather(key = genus, value = mean_weight, Baiomys:Spermophilus)
 
 
 
@@ -319,20 +343,49 @@ heaviest_year <- surveys %>%
 #    and use the function n_distinct() to get the number of unique genera within a particular chunk of data. 
 #    It’s a powerful function! See ?n_distinct for more.
 
-# 2. Now take that data frame and pivot_longer() it again, so each row is a unique plot_id by year combination.
+?n_distinct
+?spread
+#NOTE: genera is plural of genus
+
+surveys_ch1 <- surveys %>% 
+  group_by(plot_id,year) %>% 
+  summarise(n_genera = n_distinct(genus)) %>% 
+  spread(year, n_genera)
+
+head(surveys_ch1)
+
+
+# 2. Now take that data frame and gather() it again, so each row is a unique plot_id by year combination.
+
+surveys_ch2 <- surveys_ch1 %>% 
+  gather(key = year, value = n_genera, -plot_id)
+
+head(surveys_ch2)
+tail(surveys_ch2)
 
 # 3. The surveys data set has two measurement columns: hindfoot_length and weight. 
 #    This makes it difficult to do things like look at the relationship between mean values of each 
 #    measurement per year in different plot types. Let’s walk through a common solution for this type of problem. 
-#    First, use pivot_longer() to create a dataset where we have a key column called measurement and a value column that 
+#    First, use gather() to create a dataset where we have a key column called measurement and a value column that 
 #    takes on the value of either hindfoot_length or weight. 
 #    Hint: You’ll need to specify which columns are being pivoted.
 
+surveys_ch3 <- surveys %>% 
+  gather("measurement", "value",hindfoot_length, weight)
+
+head(surveys_ch3)
+
 # 4. With this new data set, calculate the average of each measurement in each year for each different plot_type. 
-#    Then pivot_wider() them into a data set with a column for hindfoot_length and weight. 
-#    Hint: You only need to specify the key and value columns for pivot_wider().
+#    Then spread() them into a data set with a column for hindfoot_length and weight. 
+#    Hint: You only need to specify the key and value columns for spread().
 
+surveys_ch4 <- surveys_ch3 %>% 
+  group_by(year, measurement, plot_type) %>% 
+  summarise(mean_value = mean(value, na.rm = TRUE)) %>% 
+  spread(measurement, mean_value)
 
+head(surveys_ch4)
+tail(surveys_ch4)
 
 
 
@@ -340,10 +393,9 @@ heaviest_year <- surveys %>%
 # Exporting data
 #----------------
 
+write.csv(surveys_ch4, file = "data_out/surveys_ch4.csv")
 
-
-
-
+?write.csv
 
 
 
